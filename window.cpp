@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -19,11 +20,11 @@ using namespace std;
 #define RESULT_HEIGHT 38
 #define RESULT_WIDTH 173
 
-#define DEFAULT_TEXT L"SNsanafonP"
+#define DEFAULT_TEXT "SNsanafonP"
 
-#define P1_PATH "C:\Program Files\Cockatrice\servatrice.exe"
-#define P2_PATH "NULL"
-#define P3_PATH "NULL"
+#define P1_PATH "C:/Program Files/Cockatrice/servatrice.exe"
+#define P2_PATH "NUL"
+#define P3_PATH "NUL"
 
 #define P1_TITLE "Kontakt 5"
 #define P2_TITLE 2	//NULL
@@ -61,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hInstance = hInst;
-	wc.lpszClassName = L"InitWindow";
+	wc.lpszClassName = (LPCWSTR)(LPCWSTR)"InitWindow";
 	wc.lpfnWndProc = WProc;
 
 	//check for successful class registration
@@ -69,11 +70,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 		return -1;
 	}
 
-	CreateWindowW(L"InitWindow", L"AutoCAP", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME | WS_VISIBLE,
+	CreateWindowW((LPCWSTR)(LPCWSTR)"InitWindow", (LPCWSTR)"AutoCAP", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME | WS_VISIBLE,
 				  100, 25, 500, 500, NULL, NULL, NULL, NULL);
 	MSG msg = { 0 };
 
-	while (GetMessage(&msg, NULL, NULL, NULL)) {
+	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 
@@ -86,7 +87,7 @@ LRESULT CALLBACK WProc(HWND hWnd, UINT msg, WPARAM  wp, LPARAM lp) {
 	switch (msg) {
 	case WM_DESTROY:
 		if (!FreeConsole()) {
-			SetWindowText(StatusBar, L"Console Destruction Failed!");
+			SetWindowText(StatusBar, "Console Destruction Failed!");
 		}
 		fclose(WinFile);
 		PostQuitMessage(0);
@@ -115,33 +116,33 @@ void AddMenus(HWND hWnd) {
 	hMenu = CreateMenu();
 	HMENU hFileMenu = CreateMenu();
 
-	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_EXIT, L"Exit");
+	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_EXIT, "Exit");
 
-	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, L"File");
+	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, (LPCSTR)"File");
 
 	SetMenu(hWnd,hMenu);
 }
 
 void InitExProgram(HWND hWnd) {
 	//create labels (static)
-	hP1 = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"P1 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP1 = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"P1 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP1, 24);
-	hP2 = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"P2 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL + STATUS_YINCREMENT, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP2 = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"P2 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL + STATUS_YINCREMENT, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP2, 24);
-	hP3 = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"P3 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL + 2 * STATUS_YINCREMENT, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP3 = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"P3 Status:", WS_VISIBLE | WS_CHILD | WS_BORDER, STATUS_XINITIAL, STATUS_YINITIAL + 2 * STATUS_YINCREMENT, STATUS_WIDTH, STATUS_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP3, 24);
 	//create status (dynamic)
-	hP1Result = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP1Result = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP1Result, 24);
-	hP2Result = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL + RESULT_YINCREMENT, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP2Result = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL + RESULT_YINCREMENT, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP2Result, 24);
-	hP3Result = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL + 2 * RESULT_YINCREMENT, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
+	hP3Result = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"Deinitialized", SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, RESULT_XINITIAL, RESULT_YINITIAL + 2 * RESULT_YINCREMENT, RESULT_WIDTH, RESULT_HEIGHT, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, hP3Result, 24);
 	//create init button
-	InitButton = CreateWindowExW(NULL, L"button", L"Initialize", BS_DEFPUSHBUTTON | SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, 335, 10, 148, 50, hWnd, (HMENU)INITIALIZE_PRESSED, NULL, NULL);
+	InitButton = CreateWindowExW(0, (LPCWSTR)"button", (LPCWSTR)"Initialize", BS_DEFPUSHBUTTON | SS_CENTER | WS_VISIBLE | WS_CHILD | WS_BORDER, 335, 10, 148, 50, hWnd, (HMENU)INITIALIZE_PRESSED, NULL, NULL);
 	SetFont(hWnd, InitButton, 24);
 	//create status bar
-	StatusBar = CreateWindowExW(WS_EX_STATICEDGE, L"static", L"Waiting for Input", WS_VISIBLE | WS_CHILD, 5, 420, 500, 23, hWnd, NULL, NULL, NULL);
+	StatusBar = CreateWindowExW(WS_EX_STATICEDGE, (LPCWSTR)"static", (LPCWSTR)"Waiting for Input", WS_VISIBLE | WS_CHILD, 5, 420, 500, 23, hWnd, NULL, NULL, NULL);
 	SetFont(hWnd, StatusBar, 12);
 }
 
@@ -155,39 +156,39 @@ void SetFont(HWND hWnd,HWND hTarget,int size){
 	hFont = CreateFont(lfHeight, 0, 0, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 0, DEFAULT_TEXT);
 
 	if (!hFont) {
-		MessageBox(hWnd, L"Font creation failed!", L"Error", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(hWnd, (LPCSTR)"Font creation failed!", (LPCSTR)"Error", MB_OK | MB_ICONEXCLAMATION);
 	}
 	SendMessageW(hTarget, WM_SETFONT, WPARAM(hFont), TRUE);
 }
 
 void LaunchExProgram() {
-	SetWindowText(StatusBar, L"Beginning Initialization");
+	SetWindowText(StatusBar, (LPCSTR)"Beginning Initialization");
 
 	//init P1
-	if (CreateProcess(TEXT(P1_PATH), NULL, NULL, NULL, FALSE, NULL, NULL, NULL, &startInfoP1, &processInfoP1)) {
-		SetWindowText(hP1Result, L"Initialized");
+	if (CreateProcess(TEXT(P1_PATH), NULL, NULL, NULL, FALSE, 0, NULL, NULL, &startInfoP1, &processInfoP1)) {
+		SetWindowText(hP1Result, (LPCSTR)"Initialized");
 	}
 	else {
-		if (P1_PATH != "NULL") {
-			SetWindowText(StatusBar, L"P1 Failed!");
+		if (P1_PATH != "NUL") {
+			SetWindowText(StatusBar, "P1 Failed!");
 		}
 	}
 	//init P2
-	if (CreateProcess(TEXT(P2_PATH), NULL, NULL, NULL, FALSE, NULL, NULL, NULL, &startInfoP2, &processInfoP2)) {
-		SetWindowText(hP2Result, L"Initialized");
+	if (CreateProcess(TEXT(P2_PATH), NULL, NULL, NULL, FALSE, 0, NULL, NULL, &startInfoP2, &processInfoP2)) {
+		SetWindowText(hP2Result, (LPCSTR)"Initialized");
 	}
 	else {
-		if (P2_PATH != "NULL") {
-			SetWindowText(StatusBar, L"P2 Failed!");
+		if (P2_PATH != "NUL") {
+			SetWindowText(StatusBar, "P2 Failed!");
 		}
 	}
 	//init P3
-	if (CreateProcess(TEXT(P3_PATH), NULL, NULL, NULL, FALSE, NULL, NULL, NULL, &startInfoP3, &processInfoP3)) {
-		SetWindowText(hP3Result, L"Initialized");
+	if (CreateProcess(TEXT(P3_PATH), NULL, NULL, NULL, FALSE, 0, NULL, NULL, &startInfoP3, &processInfoP3)) {
+		SetWindowText(hP3Result, (LPCSTR)"Initialized");
 	}
 	else {
-		if (P3_PATH != "NULL") {
-			SetWindowText(StatusBar, L"P3 Failed!");
+		if (P3_PATH != "NUL") {
+			SetWindowText(StatusBar, "P3 Failed!");
 		}
 	}
 }
@@ -196,22 +197,22 @@ void WinLayout() {
 
 
 	if (!AllocConsole()) {
-		SetWindowText(StatusBar, L"Console Initialization Failed!");
+		SetWindowText(StatusBar, "Console Initialization Failed!");
 	}
 
-	freopen_s(&WinFile, "CONOUT$", "w", stdout);						//workaround to manipulate window position
+	//freopen_s(&WinFile, "CONOUT$", "w", stdout);						//workaround to manipulate window position
 	cout.clear();
 	Sleep(500);
 
 
-	P1 = GetHwnd(processInfoP1.dwThreadId, NULL);
+	P1 = GetHwnd(processInfoP1.dwThreadId, 0);
 	cout << "test";
 	cout << P1 << endl;
 
 	Sleep(2000);
 
 	if (!SetWindowPos(P1, NULL, 250, 500, 5, 5, SWP_NOSIZE | SWP_SHOWWINDOW)) {
-		//SetWindowText(StatusBar, L"P3 Move Failed!");
+		//SetWindowText(StatusBar, "P3 Move Failed!");
 	}
 
 }
@@ -219,11 +220,11 @@ void WinLayout() {
 HWND GetHwnd(DWORD threadid, LPARAM title) {
 	HWND handle;
 	if (EnumWindows(EnumWindowsProc, threadid)) {
-		SetWindowText(StatusBar, L"Window Enumeration Failed");
+		SetWindowText(StatusBar, "Window Enumeration Failed");
 	}
 
 	/*if(EnumChildWindows(g_HWND, EnumWindowsChildProc, title)){
-		SetWindowText(StatusBar, L"Child Window Enumeration Failed");
+		SetWindowText(StatusBar, "Child Window Enumeration Failed");
 	}*/
 	cout << g_HWND << endl;
 
@@ -233,7 +234,7 @@ HWND GetHwnd(DWORD threadid, LPARAM title) {
 		g_HWND = FindWindowA("NINormalWindow0000000140000000", P1_TITLE);
 	}
 	else {
-		SetWindowText(StatusBar, L"Child Window Finder Failed!");
+		SetWindowText(StatusBar, "Child Window Finder Failed!");
 	}
 
 	return g_HWND;
@@ -247,7 +248,7 @@ static BOOL CALLBACK EnumWindowsChildProc(HWND hwnd, LPARAM title) {
 	LPSTR hTitle;
 
 	if (GetWindowTextA(hwnd, hTitle, 100) == 0) {
-		SetWindowText(StatusBar, L"GetWindowTextA Failed!");
+		SetWindowText(StatusBar, "GetWindowTextA Failed!");
 	}
 
 	cout << g_HWND;
